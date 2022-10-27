@@ -1,0 +1,62 @@
+CREATE TABLE localidades (
+    	    id_localidad INT NOT NULL AUTO_INCREMENT, 
+                nombre_localidad VARCHAR(30) NOT NULL,
+                codigo_Area INT NOT NULL,
+                PRIMARY KEY (id_localidad)
+);
+
+
+CREATE TABLE telefonos (
+    	    id_telefono INT NOT NULL AUTO_INCREMENT,
+                numero VARCHAR(25) NOT NULL,
+                nombre_localidad VARCHAR(25) NOT NULL,
+                PRIMARY KEY (id_telefono),
+
+    		id_localidad INT NOT NULL,
+    			FOREIGN KEY (id_localidad) REFERENCES localidades (id_localidad)
+				ON DELETE CASCADE
+				ON UPDATE CASCADE
+);
+
+
+CREATE TABLE clientes (
+    	    id_cliente INT NOT NULL AUTO_INCREMENT,
+                CUILCUIT BIGINT NOT NULL,
+                nombre VARCHAR(25) NOT NULL,
+                apellido VARCHAR(25) NOT NULL,
+                telefono VARCHAR(25) NOT NULL,
+                razon_social VARCHAR(25) NOT NULL,
+                email VARCHAR(25) NOT NULL,
+                PRIMARY KEY (id_cliente)
+);
+
+
+CREATE TABLE campanias (
+            id_campania INT NOT NULL AUTO_INCREMENT,
+                texto VARCHAR(160) NOT NULL,
+                estado ENUM('creada', 'en ejecución', 'finalizada') DEFAULT 'creada' NOT NULL,
+                nombre VARCHAR(25) NOT NULL,
+                fecha_inicio DATE NOT NULL,
+    cantidad_mensajes ENUM('7000', '14000', '21000', '28000', '35000', '42000', '49000', '56000', '63000', '70000') NOT NULL,
+                PRIMARY KEY (id_campania),
+
+		id_cliente INT NOT NULL,
+    			FOREIGN KEY (id_cliente) REFERENCES clientes (id_cliente)
+				ON DELETE NO ACTION
+				ON UPDATE NO ACTION
+);
+
+
+CREATE TABLE localidades_por_campania (
+            id_localidades_por_campania INT NOT NULL AUTO_INCREMENT,
+                PRIMARY KEY (id_localidades_por_campania),
+
+    		id_localidad INT NOT NULL,
+    			FOREIGN KEY (id_localidad) REFERENCES localidades (id_localidad)
+				ON DELETE CASCADE
+				ON UPDATE CASCADE,
+    		id_campania INT NOT NULL,
+    			FOREIGN KEY (id_campania) REFERENCES campanias (id_campania)
+				ON DELETE CASCADE
+				ON UPDATE CASCADE
+);
